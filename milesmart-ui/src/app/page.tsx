@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Hero from "./components/Hero";
 import Hero2 from "./components/Hero2";
 import Popularcar from "./components/Popularcar";
@@ -46,7 +47,9 @@ export default function Home() {
 
   return (
     <main className='flex flex-col min-h-screen dark:bg-[#181818] dark:text-white'>
-      <HeaderBar />
+      <Suspense>
+        <HeaderBar />
+      </Suspense>
       <div className="flex flex-1 flex-col overflow-hidden  ">
         <div className="">
           <Hero />

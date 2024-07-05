@@ -15,7 +15,10 @@ export type Vehicle = {
     state: string,
     transmission: string,
     year: number 
-    wishlist_id?: Wishlist
+    wishlist_id?: Wishlist,
+    condition?: string,
+    drive?: string
+    description: string
 }
 
 export type Wishlist = {

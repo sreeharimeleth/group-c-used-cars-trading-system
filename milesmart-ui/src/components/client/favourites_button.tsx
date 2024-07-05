@@ -1,3 +1,5 @@
+'use client'
+
 import { backendFetch } from "@/app/actions"
 import { useState } from "react"
 import { ComponentAttributes, Vehicle } from "../atrributes"

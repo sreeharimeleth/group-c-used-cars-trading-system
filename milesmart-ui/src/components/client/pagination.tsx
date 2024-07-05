@@ -3,6 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { ComponentAttributes } from "../atrributes"
 import { NextIcon } from "../icons/next"
+import { useEffect } from "react"
 
 type PaginationAttributes = ComponentAttributes & {
     maxPages?: number,
@@ -27,6 +28,12 @@ export function Pagination({ className, maxPages, parameterName = 'page', hidden
         newSearchParams.set(parameterName, (page-1).toString())
         router.replace(`${path}?${newSearchParams}`)
     }
+
+    useEffect(() => {
+        const newSearchParams = new URLSearchParams(searchParams)
+        newSearchParams.set(parameterName, (page+1).toString())
+        router.prefetch(`${path}?${newSearchParams}`)
+    })
 
     return (
         <div className={`${hidden? 'hidden': 'flex'} justify-between p-1 rounded-lg items-center bg-white dark:bg-white/10 dark:text-white ${className}`}>

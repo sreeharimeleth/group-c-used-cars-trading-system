@@ -3,7 +3,6 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
 export async function GET(request: Request) {
-    console.log(`Callback redirecting...`)
     const cookieStore = cookies()
     const client_code = cookieStore.get('client_code')?.value ?? '0'
     const token_resp = await backendFetch(`token?client_code=${client_code}`)

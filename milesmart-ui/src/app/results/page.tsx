@@ -1,13 +1,13 @@
 'use client'
 
 import './styles.css'
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import ResultCard from '../components/result_card';
 import RangeSlider from '../components/range_slider';
 import { useRouter, useSearchParams } from 'next/navigation';
 import HeaderBar from '../components/header_bar';
 
-export default function Results() {
+function ResultsView() {
     const router = useRouter()
     const search_params = useSearchParams()
     const [objs, setObjs] = useState(Array())
@@ -207,4 +207,12 @@ export default function Results() {
           </div>
         </main>
     )
+}
+
+export default function Results() {
+  return (
+    <Suspense>
+      <ResultsView/>
+    </Suspense>
+  )
 }

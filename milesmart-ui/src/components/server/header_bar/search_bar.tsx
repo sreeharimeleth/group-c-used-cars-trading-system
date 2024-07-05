@@ -28,7 +28,7 @@ export function SearchBar({searchKey, onSearchKeyChanged, onSearch, className, h
     return (
         <input hidden={hidden} placeholder="Search" className={`dark:bg-white/10 bg-black/10 flex-1 max-w-[480px] w-full rounded-md px-2 py-1 duration-150 placeholder:text-gray-500 dark:placeholder:text-gray-300 placeholder:text-center text-center ${className}`} style={{outline: "none"}} 
         value={ searchKey ?? sk } 
-        onChange={(e) => onSearchKeyChanged(e.target.value)} 
-        onKeyDownCapture={(e) => { if (e.key == 'Enter') onSearch(sk) }}/>
+        onChange={(e) => { if (onSearchKeyChanged != undefined) onSearchKeyChanged(e.target.value) }} 
+        onKeyDownCapture={(e) => { if (e.key == 'Enter' && onSearch != undefined) onSearch(sk) }}/>
     )
 }

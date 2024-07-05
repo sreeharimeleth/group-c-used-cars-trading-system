@@ -39,7 +39,7 @@ export function ImageGallary({type = 'imageUrls', src, endpoint = '', fileChoosi
 
     return (
         <div className={`flex flex-col gap-3 ${className}`}>
-            <div className="flex items-center justify-center rounded-lg overflow-clip aspect-video min-h-44 dark:bg-neutral-800 bg-neutral-200">
+            <div className="flex items-center justify-center rounded-lg overflow-clip aspect-video min-h-44 dark:bg-white/10 bg-white">
                 { imageUrls.length > 0? <Image width={-1} height={-1} src={imageUrls.length > 0? imageUrls[selection]: ""} alt={`Image`} className="h-full w-full object-contain place-self-center"/>: <EmptyImageIcon className="w-2/4 max-w-72 h-2/4 max-h-72 p-8 fill-neutral-700"/> }
             </div>  
             <div className="flex overflow-auto px-1">

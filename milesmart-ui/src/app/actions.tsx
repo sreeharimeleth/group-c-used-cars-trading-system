@@ -13,8 +13,6 @@ export async function login(callback: string) {
     const cookieStore = cookies()
     cookieStore.set('callback', callback)
 
-    console.log('Fetching Client Code...')
-
     const client_code_resp = await fetch(new URL('client_code', server_url), {
         headers: { 
             'Authorization': `Basic ${ btoa(`${client_id}:${password}`) }`,
@@ -30,8 +28,6 @@ export async function login(callback: string) {
     if (!client_code_resp.ok) throw new Error(await client_code_resp.text());
     const client_code = (await client_code_resp.json())['client_code']
     cookieStore.set('client_code', client_code)
-
-    console.log(`Client code: ${client_code}\nredirecting...`)
 
     redirect(new URL(`login?client_code=${client_code}`, server_url).toString())
 }

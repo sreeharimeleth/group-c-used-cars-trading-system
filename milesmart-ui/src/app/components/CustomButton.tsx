@@ -2,7 +2,15 @@
 
 import Image from "next/image";
 
-import { CustomButtonProps } from "@types";
+type CustomButtonProps = {
+  isDisabled?: boolean, 
+  btnType?: any, 
+  containerStyles?: string, 
+  textStyles?: string, 
+  title?: string, 
+  rightIcon?: any, 
+  handleClick?: any
+}
 
 const Button = ({ isDisabled, btnType, containerStyles, textStyles, title, rightIcon, handleClick }: CustomButtonProps) => (
   <button
