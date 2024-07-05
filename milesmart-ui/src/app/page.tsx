@@ -1,21 +1,11 @@
-"use client"
-
 import Hero from "./components/Hero";
 import Hero2 from "./components/Hero2";
 import Popularcar from "./components/Popularcar";
 import Premiumcar from "./components/Premiumcar";
-import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import Image from "next/image"
-import HeaderBar from "./components/header_bar";
+import { HeaderBar } from "@/components/server/header_bar";
 
 
 export default function Home() {
-  const [token, set_token] = useState<string|null>()
-  const [search, set_search] = useState("");
-  const search_params = useSearchParams()
-  const router = useRouter()
-  const [img_src, set_img_src] = useState("")
 
   // const load_img = (token_string: string) => {
   //   fetch("http://localhost:5000/user", {
@@ -56,7 +46,7 @@ export default function Home() {
 
   return (
     <main className='flex flex-col min-h-screen dark:bg-[#181818] dark:text-white'>
-      <HeaderBar/>
+      <HeaderBar />
       <div className="flex flex-1 flex-col overflow-hidden  ">
         <div className="">
           <Hero />
