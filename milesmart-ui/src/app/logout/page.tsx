@@ -11,7 +11,7 @@ export default function LogoutPage() {
     }, [router])
 
     return (
-        <main className="flex flex-col items-center justify-center xl:h-dvh min-h-dvh bg-neutral-200 dark:bg-neutral-900">
+        <main className="flex flex-col items-center justify-center xl:h-dvh min-h-dvh bg-neutral-100 dark:bg-neutral-900">
             <div className="dark:text-white text-3xl animate-pulse">Logging you out... Please wait</div>
         </main>
     )

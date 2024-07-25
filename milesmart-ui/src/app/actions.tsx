@@ -1,5 +1,6 @@
 'use server'
 
+import { BackendResponse } from "@/components/atrributes"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { setTimeout } from "timers/promises"
@@ -12,6 +13,8 @@ const password = `${client_id}.password`
 export async function login(callback: string) {
     const cookieStore = cookies()
     cookieStore.set('callback', callback)
+
+    // console.log('Fetching Client Code...')
 
     const client_code_resp = await fetch(new URL('client_code', server_url), {
         headers: { 
@@ -29,6 +32,8 @@ export async function login(callback: string) {
     const client_code = (await client_code_resp.json())['client_code']
     cookieStore.set('client_code', client_code)
 
+    // console.log(`Client code: ${client_code}\nredirecting...`)
+
     redirect(new URL(`login?client_code=${client_code}`, server_url).toString())
 }
 
@@ -44,15 +49,21 @@ export async function logout() {
 }
 
 export async function backendFetch(input: string | URL, init: RequestInit = {}) {
-    const cookieStore = cookies()
-    init.headers = {
-        'Client': client_id,
-        'Password': password,
-    }
+    const cookieStore = cookies();
+    init.headers = init.headers as Record<string, string> ?? {}
+    init.headers['Client'] = client_id;
+    init.headers['Password'] = password;
     if ((cookieStore.get('token')?.value?.length ?? 0) > 0) init.headers['Authorization'] = `Bearer ${cookieStore.get('token')?.value}`
     const url = new URL(input, server_url)
 
-    return await fetch(url, init)
+    const resp: Response = await fetch(url, init);
+
+    return {
+        data: resp.ok? await resp.json(): undefined,
+        status: resp.status,
+        ok: resp.ok,
+        headers: resp.headers
+    } as BackendResponse
 }
 
 export async function lag() {

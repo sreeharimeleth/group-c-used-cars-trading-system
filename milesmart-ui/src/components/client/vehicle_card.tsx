@@ -16,7 +16,7 @@ export function VehicleCard( { vehicle, className, authenticated }: VehicleCardA
     const router = useRouter()
 
     return (
-        <div className={'w-min-64 min-h-72 overflow-clip shadow-md border dark:border-white/5 rounded-lg flex flex-col bg-white dark:bg-white/5 '+className}  onClick={() => { router.push(`/product?vid=${vehicle["_id"]}`) }}>
+        <div className={'w-min-64 overflow-clip shadow-md border dark:border-white/5 rounded-lg flex flex-col bg-white dark:bg-white/5 '+className}  onClick={() => { router.push(`/product/${vehicle["_id"]}`) }}>
             <Image alt="main_image" width={-1} height={-1} src={vehicle['image_urls'][0]} className="w-full h-48 overflow-clip object-cover bg-black/10 dark:bg-white/10"/>
             <div className='flex dark:text-white min-h-24 px-3 py-2 gap-2 flex-1'>
                 <div className='flex flex-col flex-1 justify-between'>

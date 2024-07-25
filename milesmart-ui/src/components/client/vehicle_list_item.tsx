@@ -3,7 +3,6 @@
 import Image from "next/image"
 import { ComponentAttributes, Vehicle } from "../atrributes"
 import { useRouter } from "next/navigation"
-import { backendFetch } from "../../app/actions"
 import { Badge } from "../server/badge"
 import { EditIcon } from "../icons/edit"
 import { ShareIcon } from "../icons/share"
@@ -23,7 +22,7 @@ export function VehicleListItem( { vehicle, className, shareButtonHidden, onDele
     const buttonPadding = `p-${buttonRackNotFull? '2': '1.5'}`
 
     return (
-        <div className={'flex min-w-72 overflow-clip shadow-md border dark:text-white dark:border-white/5 rounded-lg bg-white dark:bg-white/5 '+className}  onClick={() => { router.push(`/product?vid=${vehicle["_id"]}`) }}>
+        <div className={'flex min-w-72 overflow-clip border dark:text-white dark:border-white/5 rounded-lg bg-white dark:bg-white/5 '+className}  onClick={() => { router.push(`/product/${vehicle["_id"]}`) }}>
             <Image alt="main_image" width={-1} height={-1} src={vehicle['image_urls'][0]} className="w-28 aspect-square overflow-clip object-cover bg-black/10 dark:bg-white/10"/>
             <div className='flex min-h-24 px-3 py-2 gap-2 flex-1'>
                 <div className='flex flex-col flex-1'>

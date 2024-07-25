@@ -4,6 +4,13 @@ export type ComponentAttributes = { className?:string, hidden?: boolean }
 
 export type FavoriteIconAttributes = ComponentAttributes & { toggled?: boolean }
 
+export type BackendResponse = {
+    status: number,
+    ok: boolean,
+    data?: any,
+    headers: object
+}
+
 export type Vehicle = { 
     _id: number, 
     fuel: string, 
@@ -35,6 +42,20 @@ export type User = {
     privilege: number,
     phone?: string,
     email: string
+}
+
+export type SearchResult<T> = {
+    count: number,
+    _id?: string|number,
+    fuel_types: string[],
+    max_odometer?: number,
+    max_price?: number,
+    max_year?: number,
+    min_odometer?: number,
+    min_price?: number,
+    min_year?: number,
+    pages?: number,
+    results: T[]
 }
 
 export type PageAttributes = {

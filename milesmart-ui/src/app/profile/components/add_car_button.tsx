@@ -12,8 +12,6 @@ export function AddNewIcon({className}: ComponentAttributes) {
 
 export function AddCarButton({hidden, className}: ComponentAttributes) {
     const router = useRouter()
-    const pathname = usePathname()
-    const searchParams = useSearchParams()
 
     function handleClick(event: MouseEvent<HTMLButtonElement>) {
         event.stopPropagation()

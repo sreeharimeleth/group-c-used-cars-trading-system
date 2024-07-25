@@ -15,13 +15,13 @@ import { setTimeout } from "timers/promises";
 export default async function Product({ params }: { params: { vid: string; }; }) {
   const [vehicle_resp, user_resp] = await Promise.all([backendFetch(`vehicles/${params.vid}`), backendFetch(`user`)]);
   if (!vehicle_resp.ok) notFound();
-  const vehicle: Vehicle = await vehicle_resp.json();
+  const vehicle: Vehicle = vehicle_resp.data
   const authenticated = user_resp.ok;
 
   await setTimeout(3000)
 
   return (
-    <main className="flex min-h-screen flex-col bg-neutral-200 dark:bg-neutral-900 dark:text-white">
+    <main className="flex min-h-screen flex-col bg-neutral-100 dark:bg-neutral-900 dark:text-white">
       <HeaderBar />
 
       <div className="flex flex-none gap-4 p-4 flex-col lg:flex-row w-xl">

@@ -18,11 +18,11 @@ export function FavoriteButton({vehicle, hidden}: FavoriteButtonAttributes) {
             body: JSON.stringify({ 'vehicle': vehicle._id })
         })
         if (!resp.ok) throw new Error('Wishlist Marking Failed');
-        vehicle.wishlist_id = await resp.json()
+        vehicle.wishlist_id = resp.data
         setToggled(true);
     }
     async function unmark() {
-        const resp = await backendFetch(`backend/user/wishlist/${vehicle.wishlist_id?._id}`, { method: 'DELETE' })
+        const resp = await backendFetch(`user/wishlist/${vehicle.wishlist_id?._id}`, { method: 'DELETE' })
         if (!resp.ok) throw new Error('Wishlist UnMarking Failed');
         vehicle.wishlist_id = undefined
         setToggled(false);

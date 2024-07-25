@@ -32,12 +32,12 @@ function SectionSkeletons({hidden, title}: ComponentAttributes & { title: string
 async function MyCarsSection({page = 0}: ComponentAttributes & { page?: number }) {
     const vehicles_resp = await backendFetch(`user/vehicles?filter_bounds=false&page=${page}`)
     if (!vehicles_resp.ok) throw Error('Fetch Error')
-    const query_response_object = await vehicles_resp.json();
+    const query_response_object = vehicles_resp.data;
     const vehicles: Vehicle[] = query_response_object['results']
 
     return (
         <div className={`flex flex-1 flex-col gap-4`}>
-            <div className="flex-1 flex-col bg-white dark:bg-white/10 rounded-xl">
+            <div className="flex-1 flex-col bg-white dark:bg-white/10 rounded-xl overflow-clip">
                 <div className="xl:flex hidden justify-between items-center h-16 px-5 py-3 border-b-2 dark:border-neutral-700">
                     <div className="dark:text-white text-xl">My Cars</div>
                     <AddCarButton/>
@@ -52,7 +52,7 @@ async function MyCarsSection({page = 0}: ComponentAttributes & { page?: number }
 async function MyFavouritesSection({page = 0}: ComponentAttributes & { page?: number }) {
     const wishlists_resp = await backendFetch(`user/wishlist?page=${page}`)
     if (!wishlists_resp.ok) throw Error('Fetch Error')
-    const query_response_object = await wishlists_resp.json();
+    const query_response_object = wishlists_resp.data;
     const wishlists: Wishlist[] = query_response_object['results']
 
     return (
@@ -94,7 +94,7 @@ async function ProfileCardSection({}:{}) {
     const user_resp = await backendFetch('user')
     if (!user_resp.ok && user_resp.status != 401) throw new Error('Backend offline')
     const authenticated = user_resp.ok;
-    const user: User = authenticated? await user_resp.json(): undefined;
+    const user: User = authenticated? user_resp.data: undefined;
 
     return <ProfileCard user={user} className="md:self-start" />
 }
@@ -102,7 +102,7 @@ async function ProfileCardSection({}:{}) {
 export default function ProfilePage({searchParams}: { searchParams?: { selection?: number, my_cars_page?: number, favorites_page?: number } }) {
     if (!cookies().has('token')) redirect('/')
     return (
-        <main className="flex flex-col xl:h-dvh min-h-dvh bg-neutral-200 dark:bg-neutral-900">
+        <main className="flex flex-col xl:h-dvh min-h-dvh bg-neutral-100 dark:bg-neutral-900">
             <HeaderBar />
             <div className="flex flex-1 flex-col md:flex-row p-4 gap-4">
                 <Suspense fallback={<ProfileCardSkeleton className="md:self-start"/>}>

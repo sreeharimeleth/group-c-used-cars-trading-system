@@ -2,7 +2,7 @@ import { ComponentAttributes } from "../atrributes";
 
 export function VehicleCardSkeleton( { className }: ComponentAttributes) {
     return (
-        <div className={'w-min-64 min-h-72 animate-pulse overflow-clip shadow-md border dark:border-white/5 rounded-lg flex flex-col bg-white dark:bg-white/5 '+className}>
+        <div className={'w-min-64 animate-pulse overflow-clip shadow-md border dark:border-white/5 rounded-lg flex flex-col bg-white dark:bg-white/5 '+className}>
             <div className="w-full h-48 overflow-clip object-cover bg-black/10 dark:bg-white/10"/>
             <div className='flex dark:text-white min-h-24 px-3 py-2 gap-2 flex-1'>
                 <div className='flex flex-col flex-1 justify-between'>

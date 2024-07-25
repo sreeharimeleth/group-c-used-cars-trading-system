@@ -1,5 +1,6 @@
 'use client'
 
+import { backendFetch } from "@/app/actions"
 import { ComponentAttributes, Vehicle, Wishlist } from "@/components/atrributes"
 import { VehicleListItem } from "@/components/client/vehicle_list_item"
 import { useRouter } from "next/navigation"
@@ -23,6 +24,7 @@ export function MyCarsListView({className, vehicles}: ListViewAttributes) {
                 return <VehicleListItem vehicle={vehicle} shareButtonHidden key={index} onDelete={() => {
                     data.splice(index, 1)
                     setData([...data])
+                    backendFetch(`user/vehicles/${vehicle._id}`, { method: 'DELETE' })
                 }} onEdit={() => router.push(`edit/product/${vehicle._id}`)} />
             })}
         </div>
@@ -38,6 +40,8 @@ export function MyFavoritesListView({className, wishlists}: MyFavoritesListView)
                 return <VehicleListItem vehicle={wishlist.vehicle as Vehicle} key={index} onDelete={() => {
                     data.splice(index, 1)
                     setData([...data])
+                    const id = 
+                    backendFetch(`user/wishlist/${wishlist._id}`, { method: 'DELETE' })
                 }}/>
             })}
         </div>

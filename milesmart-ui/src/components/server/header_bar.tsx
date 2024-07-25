@@ -5,6 +5,7 @@ import { ComponentAttributes, User } from "../atrributes"
 import { LoginButton, ProfileButton, SellButton, WishlistButton } from "./header_bar/end_buttons"
 import { Suspense } from "react"
 import { backendFetch } from "@/app/actions"
+import ThemeSwitcher from "../client/theme_switcher"
 
 type HeaderBarAttributes = ComponentAttributes & {
     wishlistButtonHidden?: boolean,
@@ -21,10 +22,12 @@ async function EndButtons({ className, wishlistButtonHidden, sellButtonHidden }:
     const user_resp = await backendFetch('user')
     if (!user_resp.ok && user_resp.status != 401) throw new Error('Backend offline')
     const authenticated = user_resp.ok;
-    const user: User = authenticated? await user_resp.json(): undefined;
+    const user: User = authenticated? user_resp.data: undefined;
     
     return (
-        <div className={`flex gap-1 ${className}`}>
+        <div className={`flex items-center gap-1 ${className}`}>
+            <ThemeSwitcher />
+
             <SellButton hidden={wishlistButtonHidden} authenticated={authenticated} />
 
             <WishlistButton hidden={sellButtonHidden || !authenticated} authenticated={authenticated} />
@@ -47,7 +50,7 @@ export function HeaderBar( { className, searchBarHidden, wishlistButtonHidden, s
                 </Link>
 
                 <div hidden={ searchBarHidden } className="grow flex justify-center">
-                    <SearchBar className="text-white"/>
+                    <SearchBar className="dark:text-white"/>
                 </div>
 
                 <Suspense>
