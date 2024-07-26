@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useTheme } from 'next-themes'
 import { LightModeIcon } from '@/components/icons/light_mode'
 import { DarkModeIcon } from '@/components/icons/dark_mode'
@@ -12,14 +12,14 @@ export default function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
   const { setTheme, theme } = useTheme()
   
-  // console.log(theme);
+  const selection_bg = 'bg-black/10 dark:bg-white/10'
+  const themes = useMemo(() => ['light', 'system', 'dark'], [])
+
   useEffect(() => {
+    if (mounted) return;
     setSelection(themes.indexOf(theme ?? 'system'));
     setMounted(true);
-  }, []);
-
-  const selection_bg = 'bg-black/10 dark:bg-white/10'
-  const themes = ['light', 'system', 'dark']
+  }, [themes, theme, mounted]);
 
   function handleClick(event: any, currentSelection: number) {
     event.stopPropagation();

@@ -12,7 +12,7 @@ export default function RangeSlider({min, max, value_min, value_max, onChange}: 
         (value: number) => Math.round(min != undefined && max != undefined? ((value - min) / (max - min)) * 100: 50), [min, max]
     );
 
-    const update_range = (r_min: number, r_max: number) => {
+    const update_range = useCallback((r_min: number, r_max: number) => {
         if (maxValRef.current) {
             const minPercent = getPercent(r_min);
             const maxPercent = getPercent(r_max); 
@@ -22,11 +22,23 @@ export default function RangeSlider({min, max, value_min, value_max, onChange}: 
                 range.current.style.width = `${maxPercent - minPercent}%`;
             }
         }
-    }
+    }, [getPercent])
+
+    // const update_range = (r_min: number, r_max: number) => {
+    //     if (maxValRef.current) {
+    //         const minPercent = getPercent(r_min);
+    //         const maxPercent = getPercent(r_max); 
+
+    //         if (range.current) {
+    //             range.current.style.left = `${minPercent}%`;
+    //             range.current.style.width = `${maxPercent - minPercent}%`;
+    //         }
+    //     }
+    // }
 
     useEffect(() => { 
         update_range(+minValRef.current!.value, +maxValRef.current!.value);
-    }, [value_min, value_max, min, max])
+    }, [value_min, value_max, min, max, update_range])
 
     return (
         <div>
