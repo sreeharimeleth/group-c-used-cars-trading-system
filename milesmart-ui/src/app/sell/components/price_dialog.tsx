@@ -2,9 +2,10 @@
 
 import { ComponentAttributes } from "@/components/atrributes";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
-export function PriceDialog({hidden, onCancelled = () => {}, onContinue = () => {}}: ComponentAttributes & { onCancelled?: () => void, onContinue?: () => void }) {
-
+export function PriceDialog({hidden, prediction, onCancelled = () => {}, onContinue = () => {}}: ComponentAttributes & { onCancelled?: () => void, onContinue?: (price: number) => void, prediction?: number }) {
+    const [price, set_price] = useState("");            
     function closeDialog(e:any) {
         e.stopPropagation();
         onCancelled();
@@ -21,11 +22,12 @@ export function PriceDialog({hidden, onCancelled = () => {}, onContinue = () => 
                     <div className="text-gray-600 dark:text-white text-base ml-1 mt-4 mb-1">Your Price</div>
                     <input className="bg-gray-100 dark:bg-[#282828] placeholder:text-gray-400 rounded px-2 py-1 outline-none" 
                     // placeholder={obj['price']} 
-                        // onChange={(e) => set_price(e.target.value)} 
+                        value={price}
+                        onChange={(e) => set_price(e.target.value)} 
                     />
-                    {/* <div hidden={prediction == undefined} className="text-sm text-green-600 bg-green-100 dark:text-green-200 dark:bg-green-800 w-min text-nowrap py-1 px-4 mt-2 self-end rounded-full">
+                    <div hidden={prediction == undefined} className="text-sm text-green-600 bg-green-100 dark:text-green-200 dark:bg-green-800 w-min text-nowrap py-1 px-4 mt-2 self-end rounded-full">
                         AI Suggested Fair Price $ {prediction}
-                    </div> */}
+                    </div>
                     {/* <DialogClose asChild> */}
                         <button className="
                         px-4 py-1.5 mt-8 duration-150 rounded-md h-min w-full
@@ -35,7 +37,7 @@ export function PriceDialog({hidden, onCancelled = () => {}, onContinue = () => 
                         active:bg-gray-700 dark:active:bg-white/30" 
                         onClick={(e) => {
                             closeDialog(e);
-                            onContinue();
+                            onContinue(Number(price));
                         }}>
                         Continue
                         </button>

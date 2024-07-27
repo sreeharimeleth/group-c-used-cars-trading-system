@@ -27,7 +27,7 @@ export function AddCarButton({hidden, className}: ComponentAttributes) {
         active:bg-gray-700 dark:active:bg-white/30 ${className}`} 
         onClick={handleClick}>
             <AddNewIcon className="h-5 w-5" />
-            <div className="">Add A Car</div>
+            <div className="">Add Car</div>
         </button>
     )
 }

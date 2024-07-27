@@ -26,7 +26,7 @@ type ProfileButtonAttributes = ComponentAttributes & {
     destinationRoute?: string
 }
 
-export function SellButton({hidden, className, authenticated, destinationRoute = 'sell'}: SellButtonAttributes) {
+export function SellButton({hidden, className, authenticated, destinationRoute = '/sell'}: SellButtonAttributes) {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()

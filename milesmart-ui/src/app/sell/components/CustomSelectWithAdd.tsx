@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, FC, useEffect, useRef } from "react";
-import { AiOutlineCheck } from "react-icons/ai";
-import { BsChevronExpand } from "react-icons/bs";
+// import { AiOutlineCheck } from "react-icons/ai";
+// import { BsChevronExpand } from "react-icons/bs";
 
 interface CustomSelectWithAddProps {
   options: string[];

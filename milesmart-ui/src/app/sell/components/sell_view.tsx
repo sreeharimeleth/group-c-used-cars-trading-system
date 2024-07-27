@@ -1,13 +1,13 @@
 'use client'
 
-import { Dialog, DialogTrigger, DialogPortal, DialogOverlay, DialogContent, DialogClose } from "@radix-ui/react-dialog";
-import { Cross2Icon } from "@radix-ui/react-icons";
+// import { Dialog, DialogTrigger, DialogPortal, DialogOverlay, DialogContent, DialogClose } from "@radix-ui/react-dialog";
+// import { Cross2Icon } from "@radix-ui/react-icons";
 import CustomEntryBox from "./CustomEntryBox";
 import CustomSelectBox from "./CustomSelectBox";
 import DescriptionInput from "./DescriptionInput";
 import DistanceInput from "./DistanceInput";
 import YearInput from "./YearInput";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { ComponentAttributes } from "@/components/atrributes";
 import { ImageGallary } from "@/components/client/image_gallary";
@@ -37,7 +37,7 @@ export function SellView({}:ComponentAttributes) {
     const [selected_files, set_selected_files] = useState<File[]>([]);
     // const [token, set_token] = useState<string|undefined>()
     // const [obj, setObj] = useState(Object())
-    const [price,set_price] = useState("")
+    // const [price,set_price] = useState("")
     const [ContinueDialog,setContinueDialog] = useState(false)
     const [Loading,setLoading] = useState(false)
     const [prediction,set_prediction] = useState<number|undefined>()
@@ -50,7 +50,7 @@ export function SellView({}:ComponentAttributes) {
          console.log("Input value:", value);
       };
  
-      const upload_vehicle = async () => {
+      const upload_vehicle = async (price: number) => {
        const img_urls = Array<string>()
        for (let index = 0; index < selected_files.length; index++) {
           const image = selected_files[index];
@@ -82,7 +82,7 @@ export function SellView({}:ComponentAttributes) {
              'model': model,
              'VIN': vin,
              'description': description,
-             'price': Number(price),
+             'price': price,
              'year': Number(year),
              'manufacturer': brand,
              'condition': condition,
@@ -110,7 +110,13 @@ export function SellView({}:ComponentAttributes) {
       //  const access_token = localStorage.getItem("token")
       //  if (access_token) set_token(access_token)
       // })
-
+      
+      //Checks if form is complete
+      const isFormComplete = useMemo(
+        () => state && brand && cylinder && fuel && transmission && drive && condition && type && status && year && model && vin && paint && description && distance && selected_files.length > 0,
+        [state, brand, cylinder, fuel, transmission, drive, condition, type, status, year, model, vin, paint, description, distance, selected_files]
+      );
+      
     return (
         <div>
             {/* Page title */}
@@ -122,7 +128,10 @@ export function SellView({}:ComponentAttributes) {
     <div className="flex flex-col md:flex-row gap-4 px-4 md:px-10">
       {/* Upload Form */}
       <div className=" md:w-3/5">
-        <ImageGallary type="localFiles" fileChoosingEnabled/>
+        <ImageGallary type="localFiles" fileChoosingEnabled src={selected_files} onFileDelete={(index) => {
+          selected_files.splice(index, 1);
+          set_selected_files([...selected_files]);
+        }} onFilesAdded={(files) => set_selected_files([...selected_files, ...files])}/>
       </div>
       {/* Form */}
       <div className='flex flex-col md:w-2/5 gap-4'>
@@ -132,11 +141,6 @@ export function SellView({}:ComponentAttributes) {
           {/* Brand */}
           <div className="flex flex-col w-full px-4 md:px-6 py-2 ">
             <h1 className="text-xl font-extrabold dark:text-white py-2">Brand</h1>
-            {/* <CustomSelectBox
-              options={['Acura','Alfa-Romeo','Aston Martin','Audi','Bmw','Buick','Cadillac','Chevrolet','Chrysler','Datsun','Dodge','Ferrari','Fiat','Ford','Gmc','Harley-Davidson','Honda','Hyundai','Infiniti','Jaguar','Jeep','Kia','Land Rover','Lexus','Lincoln','Mazda','Mercedes-Benz','Mini','Mitsubishi','Morgan','Nissan','Pontiac','Porsche','Ram','Rover','Subaru','Tesla','Toyota','Volkswagen','Volvo']}
-              placeholder="Brand"
-              onOptionSelect={(option: any) => set_brand(option)}
-            /> */}
             <CustomSelectWithAdd
               options={['Acura','Alfa-Romeo','Aston Martin','Audi','Bmw','Buick','Cadillac','Chevrolet','Chrysler','Datsun','Dodge','Ferrari','Fiat','Ford','Gmc','Harley-Davidson','Honda','Hyundai','Infiniti','Jaguar','Jeep','Kia','Land Rover','Lexus','Lincoln','Mazda','Mercedes-Benz','Mini','Mitsubishi','Morgan','Nissan','Pontiac','Porsche','Ram','Rover','Subaru','Tesla','Toyota','Volkswagen','Volvo']}
               placeholder="Brand"
@@ -298,11 +302,15 @@ export function SellView({}:ComponentAttributes) {
         <div className="flex flex-1 place-self-end">
           {/* <Dialog> */}
             {/* <DialogTrigger asChild> */}
-              <button className="
-                duration-150 text-white rounded-lg bg-black dark:bg-[#404040] dark:hover:bg-white/25 w-24 h-12 min-w-[130px]" 
+              <button className={`
+                  duration-150 text-white rounded-lg bg-black dark:bg-[#404040] dark:hover:bg-white/25 w-24 h-12 min-w-[130px]
+                  ${!isFormComplete ? 'cursor-not-allowed opacity-50' : ''}
+                `}
+                disabled={!isFormComplete}
                 onClick={() => {
                   setContinueDialog(true)
-                  // fetch('backend/ml/price', {
+                  console.log("Running")
+                  // backendFetch('/ml/price', {
                   //   method: 'POST',
                   //   headers: {
                   //     'Content-Type': 'application/json',
@@ -310,7 +318,6 @@ export function SellView({}:ComponentAttributes) {
                   //   body: JSON.stringify({
                   //     'model': model,
                   //     'VIN': vin,
-                  //     'price': Number(price),
                   //     'year': Number(year),
                   //     'manufacturer': brand,
                   //     'condition': condition,
@@ -324,9 +331,9 @@ export function SellView({}:ComponentAttributes) {
                   //     'state': state.toLowerCase(),
                   //     'type': type
                   //   })
-                  // }).then((resp) => resp.json()).then((js) => {
-                  //   if ('error' in js) console.log(js)
-                  //   else set_prediction(js['price'])
+                  // }).then((resp) => {
+                  //   if (!resp.ok) console.log("ERROR")
+                  //   else set_prediction(resp.data)
                   // })
                 }}>
                 Continue
@@ -379,9 +386,9 @@ export function SellView({}:ComponentAttributes) {
       </div>
       
     </div>
-    <PriceDialog hidden={!ContinueDialog} onCancelled={() => setContinueDialog(false)} onContinue={() => {
+    <PriceDialog hidden={!ContinueDialog} onCancelled={() => setContinueDialog(false)} onContinue={(price) => {
       setLoading(true);
-      upload_vehicle().then(() => setLoading(false))
+      upload_vehicle(price).then(() => setLoading(false))
     }}/>
     <LoadDialog hidden={!Loading}  />
     {/* <div>Hello</div> */}
