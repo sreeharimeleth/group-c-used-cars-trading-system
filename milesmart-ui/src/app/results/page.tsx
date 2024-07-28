@@ -41,12 +41,13 @@ async function Page({ searchParams }: { searchParams: SearchParamsAttributes }) 
 	if (searchParams.year_max) urlSearchParams.set('year_max', searchParams.year_max.toString());
 	if (searchParams.fuel_types) urlSearchParams.set('fuel_types', searchParams.fuel_types);
 	if (searchParams.sk) urlSearchParams.set('sk', searchParams.sk);
-	const result_resp = await backendFetch(`vehicles?${urlSearchParams}`);
+	const [result_resp, user_resp] = await Promise.all([backendFetch(`vehicles?${urlSearchParams}`), backendFetch('/user')]) ;
 	if (!result_resp.ok) throw new Error('Backend Fetch Error');
 
 	const result = result_resp.data as SearchResult<Vehicle>
+    const authenticated = user_resp.ok;
 
-	return <SearchView result={result} />
+	return <SearchView result={result} authenticated={authenticated}/>
 }
 
 function PageSkeleton() {

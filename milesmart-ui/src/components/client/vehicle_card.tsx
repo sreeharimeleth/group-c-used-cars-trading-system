@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { Badge } from "../server/badge"
 import { ShareIcon } from "../icons/share"
 import { FavoriteButton } from "./favourites_button"
+import { ShareButton } from "./share_button"
 
 type VehicleCardAttributes = ComponentAttributes & { 
     vehicle: Vehicle,
@@ -35,16 +36,7 @@ export function VehicleCard( { vehicle, className, authenticated }: VehicleCardA
                     </div>
                 </div>
                 <div className="flex gap-2 flex-col">
-                    <button className="
-                    px-2 py-2 duration-150 rounded-md
-                    fill-black dark:fill-white 
-                    hover:bg-black/10 active:bg-black/20 
-                    dark:hover:bg-white/10 dark:active:bg-white/20" 
-                    onClick={() => {
-
-                    }}>
-                        <ShareIcon className="h-5 w-5"/>
-                    </button>
+                    <ShareButton id={vehicle._id}/>
                     
                     <FavoriteButton hidden={!authenticated} vehicle={vehicle} />
                 </div>

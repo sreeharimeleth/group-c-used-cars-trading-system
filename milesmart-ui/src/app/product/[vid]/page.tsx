@@ -1,24 +1,29 @@
 import { backendFetch } from "@/app/actions";
-import { Vehicle } from "@/components/atrributes";
+import { User, Vehicle } from "@/components/atrributes";
 import { FavoriteButton } from "@/components/client/favourites_button";
 import { ImageGallary } from "@/components/client/image_gallary";
 import ReportIcon from "@/components/icons/report_icon";
 import { ShareIcon } from "@/components/icons/share";
 import { Badge } from "@/components/server/badge";
 import { HeaderBar } from "@/components/server/header_bar";
-import { ImageGallarySkeleton } from "@/components/skeletons/image_gallary";
 import { notFound } from "next/navigation";
 import PropsRow from "./components/props_row";
 import { setTimeout } from "timers/promises";
+import { BuyNowButton } from "./components/buynow_button";
+import { BuyNowDialog } from "./components/buynow_dialog";
+import { ShareButton } from "@/components/client/share_button";
 
 
 export default async function Product({ params }: { params: { vid: string; }; }) {
   const [vehicle_resp, user_resp] = await Promise.all([backendFetch(`vehicles/${params.vid}`), backendFetch(`user`)]);
   if (!vehicle_resp.ok) notFound();
   const vehicle: Vehicle = vehicle_resp.data
+  const user: User = user_resp.data
   const authenticated = user_resp.ok;
 
-  await setTimeout(3000)
+  console.log(vehicle.owner._id == user._id);
+
+  // await setTimeout(3000)
 
   return (
     <main className="flex min-h-screen flex-col bg-neutral-100 dark:bg-neutral-900 dark:text-white">
@@ -45,31 +50,35 @@ export default async function Product({ params }: { params: { vid: string; }; })
             </div>
             <div className="flex flex-col mr-4 gap-2 self-center">
               <div className="flex flex-1 gap-2 items-center flex-row-reverse ">
-                <button className="
+                {/* <button className="
                   px-2 py-2 duration-150 rounded-md h-min
                   fill-black dark:fill-white 
                   hover:bg-black/10 active:bg-black/20 
-                  dark:hover:bg-white/10 dark:active:bg-white/20">
+                  dark:hover:bg-white/10 dark:active:bg-white/20
+                  disabled:opacity-50 disabled:hover:bg-transparent"
+                  disabled={true}>
                   <ShareIcon className="h-5 w-5" />
-                </button>
+                </button> */}
+                <ShareButton id={vehicle._id}/>
 
                 <FavoriteButton vehicle={vehicle} hidden={!authenticated} />
-
                 <button className="
                   px-2 py-2 duration-150 rounded-md h-min
                   fill-red-500 dark:fill-red-500 
                   hover:bg-red-500/10 active:bg-red-500/20 
-                  dark:hover:bg-red-500/10 dark:active:bg-red-500/20">
+                  dark:hover:bg-red-500/10 dark:active:bg-red-500/20
+                  disabled:opacity-50 disabled:hover:bg-transparent"
+                  disabled={true}>
                   <ReportIcon className="h-5 w-5" />
                 </button>
               </div>
               <div className="flex flex-1">
-              <button className="
+                <BuyNowButton hidden={vehicle.owner._id == user._id}/>
+              <button disabled hidden={vehicle.owner._id != user._id} className="
                   px-4 py-1 duration-150 rounded-md h-min w-full
                   text-white 
                   bg-black dark:bg-white/20
-                  hover:bg-gray-800 dark:hover:bg-white/25
-                  active:bg-gray-700 dark:active:bg-white/30">Buy Now</button>
+                  disabled:opacity-50 ">Edit</button>
               </div>
             </div>
           </div>
@@ -100,6 +109,7 @@ export default async function Product({ params }: { params: { vid: string; }; })
             <div className="rounded-md flex-none bg-white dark:bg-white/10 h-48 w-40"/>
           </div>
         </div>
+        <BuyNowDialog user={vehicle.owner}/>
     </main>
   );
 }

@@ -48,6 +48,17 @@ export async function logout() {
     cookieStore.delete('token')
 }
 
+export async function deleteAccount() {
+    'use server'
+    const cookieStore = cookies()
+    const token_id = cookieStore.get('token_id')?.value
+    if (token_id == undefined) return;
+    
+    await backendFetch(`user`, { method: 'DELETE' })
+    cookieStore.delete('token_id')
+    cookieStore.delete('token')
+}
+
 export async function backendFetch(input: string | URL, init: RequestInit = {}) {
     const cookieStore = cookies();
     init.headers = init.headers as Record<string, string> ?? {}

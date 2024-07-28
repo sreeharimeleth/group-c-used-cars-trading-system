@@ -13,7 +13,7 @@ function FilterIcon({className}: ComponentAttributes) {
     )
 }
 
-export function SearchView({ result }: ComponentAttributes & { result: SearchResult<Vehicle> }) {
+export function SearchView({ result, authenticated }: ComponentAttributes & { result: SearchResult<Vehicle>, authenticated: boolean }) {
     const [dialogHidden, setDialogHidden] = useState(true);
 
     const ranges = {
@@ -55,7 +55,7 @@ export function SearchView({ result }: ComponentAttributes & { result: SearchRes
 						</div>
 						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 sm:max-h-search-view overflow-auto gap-4 p-8'>
 							{result.results.map((vehicle, index) => {
-								return <VehicleCard vehicle={vehicle} key={index} />
+								return <VehicleCard vehicle={vehicle} key={index} authenticated={authenticated}/>
 							})}
 						</div>
 					</div>

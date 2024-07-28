@@ -12,7 +12,7 @@ export type BackendResponse = {
 }
 
 export type Vehicle = { 
-    _id: number, 
+    _id: string, 
     fuel: string, 
     image_urls: string[],
     manufacturer: string,
@@ -25,7 +25,8 @@ export type Vehicle = {
     wishlist_id?: Wishlist,
     condition?: string,
     drive?: string
-    description: string
+    description: string,
+    owner: User
 }
 
 export type Wishlist = {

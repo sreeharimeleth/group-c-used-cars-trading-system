@@ -1,7 +1,7 @@
 'use client'
 
 import { ComponentAttributes } from "@/components/atrributes";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { CloseIcon } from "@/components/icons/close";
 import { useState } from "react";
 
 export function PriceDialog({hidden, prediction, onCancelled = () => {}, onContinue = () => {}}: ComponentAttributes & { onCancelled?: () => void, onContinue?: (price: number) => void, prediction?: number }) {
@@ -47,7 +47,7 @@ export function PriceDialog({hidden, prediction, onCancelled = () => {}, onConti
                 className="text-black hover:bg-neutral-200 active:bg-neutral-300 dark:text-white dark:hover:bg-neutral-700 dark:active:bg-neutral-600 rounded-full px-1.5 py-1.5 focus:outline-none absolute top-3 right-3"
                 aria-label="Close"
                 onClick={(e) => closeDialog(e)}>
-                    <Cross2Icon />
+                    <CloseIcon  className="h-4 md:h-5 w-4 md:w-5 self-center fill-black dark:fill-white"/>
                 </button>
             </div>
         </div>

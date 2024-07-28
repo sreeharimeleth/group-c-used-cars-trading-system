@@ -21,6 +21,23 @@ export function VehicleListItem( { vehicle, className, shareButtonHidden, onDele
     const buttonIconSize = buttonRackNotFull? '5': '4'
     const buttonPadding = `p-${buttonRackNotFull? '2': '1.5'}`
 
+    const handleShare = async () => {
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: 'Share Vehicle!',
+              text: 'Share the vehicle to your friends',
+              url: `http://localhost:3000/product/${vehicle._id}`,
+            });
+          //   console.log('Content shared successfully');
+          } catch (error) {
+          //   console.error('Error sharing content:', error);
+          }
+        } else {
+          alert('Web Share API not supported in this browser');
+        }
+      };
+
     return (
         <div className={'flex min-w-72 overflow-clip border dark:text-white dark:border-white/5 rounded-lg bg-white dark:bg-white/5 '+className}  onClick={() => { router.push(`/product/${vehicle["_id"]}`) }}>
             <Image alt="main_image" width={-1} height={-1} src={vehicle['image_urls'][0]} className="w-28 aspect-square overflow-clip object-cover bg-black/10 dark:bg-white/10"/>
@@ -46,9 +63,11 @@ export function VehicleListItem( { vehicle, className, shareButtonHidden, onDele
                     ${buttonPadding} duration-150 rounded-md
                     fill-black dark:fill-white 
                     hover:bg-black/10 active:bg-black/20 
-                    dark:hover:bg-white/10 dark:active:bg-white/20`} 
+                    dark:hover:bg-white/10 dark:active:bg-white/20
+                    disabled:opacity-50 disabled:hover:bg-transparent`} 
                     onClick={(e) => {
-                        e.stopPropagation()
+                        e.stopPropagation(),
+                        handleShare();
                     }}>
                         <ShareIcon className={`h-${buttonIconSize} w-${buttonIconSize}`}/>
                     </button>
@@ -57,7 +76,9 @@ export function VehicleListItem( { vehicle, className, shareButtonHidden, onDele
                     ${buttonPadding} duration-150 rounded-md
                     fill-black dark:fill-white 
                     hover:bg-black/10 active:bg-black/20 
-                    dark:hover:bg-white/10 dark:active:bg-white/20`} 
+                    dark:hover:bg-white/10 dark:active:bg-white/20 disabled:opacity-50 
+                    disabled:hover:bg-transparent`} 
+                    disabled={true}
                     onClick={(e) => {
                         e.stopPropagation()
                         if (onEdit) onEdit()

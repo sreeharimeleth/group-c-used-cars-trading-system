@@ -35,17 +35,23 @@ export function ProfileCard({className, user}: ProfileCardAttributes) {
                 </div>
                 <div className="md:flex-1"/>
                 <div className="flex flex-none md:mt-2 mt-4 gap-2">
-                    <button onClick={(e) => {e.stopPropagation(); router.replace('logout')}} className="flex gap-2 items-center pl-3 pr-4 py-1.5 bg-neutral-900 hover:bg-neutral-800 active:bg-neutral-700 dark:bg-white/10 dark:hover:bg-white/20 dark:active:bg-white/30 rounded-md">
+                    <button onClick={(e) => {e.stopPropagation(); router.replace('/logout')}} className="flex gap-2 items-center pl-3 pr-4 py-1.5 bg-neutral-900 hover:bg-neutral-800 active:bg-neutral-700 dark:bg-white/10 dark:hover:bg-white/20 dark:active:bg-white/30 rounded-md">
                         <LogoutIcon className="h-4 w-4 fill-white" />
                         <div className="text-white">Logout</div>
                     </button>
-                    <button className="flex gap-2 items-center pl-3 pr-4 py-1.5 bg-red-500 hover:bg-red-400 active:bg-red-300 rounded-md">
+                    <button onClick={(e) => {e.stopPropagation(); router.replace('/delete_account')}} className="flex gap-2 items-center pl-3 pr-4 py-1.5 bg-red-500 hover:bg-red-400 active:bg-red-300 rounded-md">
                         <TrashIcon className="h-4 w-4 fill-white" />
                         <div className="text-white">Close Account</div>
                     </button>
                 </div>
             </div>
-            <button className="p-2 hover:bg-black/10 active:bg-black/20 dark:hover:bg-white/10 dark:active:bg-white/20 absolute right-4 top-4 rounded-md"><EditIcon className="h-5 w-5 fill-black dark:fill-white"/></button>
+            <button
+                className="p-2 hover:bg-black/10 active:bg-black/20 dark:hover:bg-white/10 dark:active:bg-white/20 absolute right-4 top-4 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
+                disabled={true}>
+                <EditIcon className="h-5 w-5 fill-black dark:fill-white" />
+            </button>
+
+
         </div>
     )
 }

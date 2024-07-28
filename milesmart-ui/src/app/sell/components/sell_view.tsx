@@ -304,12 +304,11 @@ export function SellView({}:ComponentAttributes) {
             {/* <DialogTrigger asChild> */}
               <button className={`
                   duration-150 text-white rounded-lg bg-black dark:bg-[#404040] dark:hover:bg-white/25 w-24 h-12 min-w-[130px]
-                  ${!isFormComplete ? 'cursor-not-allowed opacity-50' : ''}
+                  ${!isFormComplete ? ' opacity-50' : ''}
                 `}
                 disabled={!isFormComplete}
                 onClick={() => {
                   setContinueDialog(true)
-                  console.log("Running")
                   // backendFetch('/ml/price', {
                   //   method: 'POST',
                   //   headers: {

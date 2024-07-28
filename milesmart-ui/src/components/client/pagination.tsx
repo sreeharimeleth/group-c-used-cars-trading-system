@@ -10,12 +10,12 @@ type PaginationAttributes = ComponentAttributes & {
     parameterName?: string
 }
 
-export function Pagination({ className, maxPages, parameterName = 'page', hidden }: PaginationAttributes) {
+export function Pagination({ className, maxPages = 0, parameterName = 'page', hidden }: PaginationAttributes) {
     const router = useRouter()
     const searchParams = useSearchParams()
     const path = usePathname()
     const page = Number.parseInt(searchParams.get(parameterName) ?? '0')
-    hidden = maxPages == 1
+    hidden = maxPages <= 1
 
     function go_next() {
         const newSearchParams = new URLSearchParams(searchParams)

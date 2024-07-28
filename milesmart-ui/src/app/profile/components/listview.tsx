@@ -24,7 +24,7 @@ export function MyCarsListView({className, vehicles}: ListViewAttributes) {
                 return <VehicleListItem vehicle={vehicle} shareButtonHidden key={index} onDelete={() => {
                     data.splice(index, 1)
                     setData([...data])
-                    backendFetch(`user/vehicles/${vehicle._id}`, { method: 'DELETE' })
+                    backendFetch(`/user/vehicles/${vehicle._id}`, { method: 'DELETE' })
                 }} onEdit={() => router.push(`edit/product/${vehicle._id}`)} />
             })}
         </div>

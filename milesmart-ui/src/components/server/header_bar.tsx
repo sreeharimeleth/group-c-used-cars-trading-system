@@ -19,7 +19,7 @@ type EndButtonsAttributes = ComponentAttributes & {
 }
 
 async function EndButtons({ className, wishlistButtonHidden, sellButtonHidden }: EndButtonsAttributes) {
-    const user_resp = await backendFetch('user')
+    const user_resp = await backendFetch('/user')
     if (!user_resp.ok && user_resp.status != 401) throw new Error('Backend offline')
     const authenticated = user_resp.ok;
     const user: User = authenticated? user_resp.data: undefined;

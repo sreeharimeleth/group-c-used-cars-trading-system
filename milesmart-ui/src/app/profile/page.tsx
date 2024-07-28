@@ -34,7 +34,7 @@ async function MyCarsSection({page = 0}: ComponentAttributes & { page?: number }
     if (!vehicles_resp.ok) throw Error('Fetch Error')
     const query_response_object = vehicles_resp.data;
     const vehicles: Vehicle[] = query_response_object['results']
-
+    
     return (
         <div className={`flex flex-1 flex-col gap-4`}>
             <div className="flex-1 flex-col bg-white dark:bg-white/10 rounded-xl overflow-clip">

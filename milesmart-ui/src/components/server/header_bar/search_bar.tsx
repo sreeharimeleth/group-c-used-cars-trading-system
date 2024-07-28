@@ -19,7 +19,7 @@ export function SearchBar({searchKey, onSearchKeyChanged, onSearch, className, h
     if (onSearch == undefined) onSearch = (searchKey) => {
         const updatedSearchParams = new URLSearchParams(searchParams)
         updatedSearchParams.set('sk', searchKey);
-        router.push(`results?${updatedSearchParams.toString()}`);
+        router.push(`/results?${updatedSearchParams.toString()}`);
     }
     if (onSearchKeyChanged == undefined) onSearchKeyChanged = (value) => set_sk(value);
 
