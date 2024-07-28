@@ -11,7 +11,7 @@ __username = "admin"
 __password = "ptUJ75ehwYIYZ3cG"
 __uri = f"mongodb+srv://{__username}:{__password}@cluster0.wtgjxax.mongodb.net/?retryWrites=true&w=majority"
 mongodbClient = MongoClient(__uri)
-mainDatabase = mongodbClient['MilesmartMain2']
+mainDatabase = mongodbClient['MilesmartMain']
 
 def generate_id(id: int|None = None) -> str:
     code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~_"

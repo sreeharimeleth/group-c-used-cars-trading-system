@@ -7,13 +7,15 @@ from . import generate_id, milesmartServer, mainDatabase
 
 loaded_model = pickle.load(open("MilesmartServer/price_prediction.pickle.dat", "rb"))
 enc =  pickle.load(open("MilesmartServer/encoder.pkl", "rb"))
+ss_feature = pickle.load(open('MilesmartServer/feature_scaler.pkl', 'rb'))
+ss_target = pickle.load(open('MilesmartServer/price_scaler.pkl', 'rb'))
 
 feature_names = ["region", "year", "manufacturer", "model", "condition", "cylinders", "fuel", "odometer", "title_status", "transmission", "drive", "type", "paint_color", "state", "lat", "long"]
 
 def predict(features):
 	# Create a Pandas DataFrame to ensure correct feature order
 	categorical_cols=['region','manufacturer','model','condition','cylinders','fuel','title_status','transmission','drive','type','paint_color', 'state']
-	
+
 	# Define the correct feature names (matching your training data)
 	df = pd.DataFrame([features], columns=feature_names)
 	df[categorical_cols] = enc.transform(df[categorical_cols])
@@ -28,8 +30,8 @@ def predict(features):
 	y_pred = loaded_model.predict(xgb.DMatrix(df))
 	prediction = y_pred[0]
 
-	prediction *= 1000
-	return prediction
+	actual_pred = ss_target.inverse_transform(prediction.reshape(-1,1))
+	return actual_pred[0][0]
 
 @milesmartServer.route('/ml/price', methods=['POST'])
 def predict_price():

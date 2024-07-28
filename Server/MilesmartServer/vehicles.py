@@ -52,10 +52,7 @@ def vehicles(id: int|str|None = None, uid: str|None = None, current_user: dict =
     if id is None:
         search_key = request.args['sk'] if 'sk' in request.args else ''
 
-        search_key_filter = [
-            { 'model': { '$regex': search_key } },
-            { 'manufacturer': { '$regex': search_key } }
-        ]
+        search_key_filter = { 'name': { '$regex': search_key, '$options': 'i' } }
         price_filter = {}
         odo_filter = {}
         year_filter = {}
@@ -80,7 +77,7 @@ def vehicles(id: int|str|None = None, uid: str|None = None, current_user: dict =
     
     match = {
         '$match': { 
-            '$or': search_key_filter, 
+            **search_key_filter, 
             **price_filter, 
             **odo_filter, 
             **year_filter,
@@ -123,16 +120,16 @@ def vehicles(id: int|str|None = None, uid: str|None = None, current_user: dict =
         
     if id is None:
         filter_bounds = request.args['filter_bounds'] == 'True' or request.args['filter_bounds'] == 'true' if 'filter_bounds' in request.args else True
-        price_range = find_range(mainDatabase['Vehicle'], 'price', { '$or': search_key_filter, **odo_filter, **year_filter, **fuel_filter, **owner_filter }) if filter_bounds else {}
-        odo_range = find_range(mainDatabase['Vehicle'], 'odometer', { '$or': search_key_filter, **price_filter, **year_filter, **fuel_filter, **owner_filter }) if filter_bounds else {}
-        year_range = find_range(mainDatabase['Vehicle'], 'year', { '$or': search_key_filter, **price_filter, **odo_filter, **fuel_filter, **owner_filter }) if filter_bounds else {}
-        fuel_list = { 'fuel_types': list(mainDatabase['Vehicle'].distinct('fuel', { '$or': search_key_filter, **price_filter, **odo_filter, **year_filter, **owner_filter })) } if filter_bounds else {}
+        price_range = find_range(mainDatabase['Vehicle'], 'price', { **search_key_filter, **odo_filter, **year_filter, **fuel_filter, **owner_filter }) if filter_bounds else {}
+        odo_range = find_range(mainDatabase['Vehicle'], 'odometer', { **search_key_filter, **price_filter, **year_filter, **fuel_filter, **owner_filter }) if filter_bounds else {}
+        year_range = find_range(mainDatabase['Vehicle'], 'year', { **search_key_filter, **price_filter, **odo_filter, **fuel_filter, **owner_filter }) if filter_bounds else {}
+        fuel_list = { 'fuel_types': list(mainDatabase['Vehicle'].distinct('fuel', { **search_key_filter, **price_filter, **odo_filter, **year_filter, **owner_filter })) } if filter_bounds else {}
         count = mainDatabase['Vehicle'].count_documents({ **match['$match'] })
         
         # odo_list = list(filter(lambda i: i != -1, odo_list))
 
         rt_obj = {
-            'pages': math.ceil(count/page_size),
+            'pages': count//page_size+1,
             'count': count,
             'results': result,
             **fuel_list,
@@ -175,12 +172,14 @@ def user_vehicle_post(current_user = None):
     uid = current_user['_id']
     body = request.json
 
-    if 'image_urls' not in body: return { 'error': 'required_parameter_not_found: ', 'details': 'parameter: image_urls' }, 404
-    image_urls = body['image_urls']
-    if len(image_urls) == 0: return { 'error': 'required_parameter_not_found: ', 'details': 'atleast 1 image required' }, 404
+    if 'images' not in body and 'image_urls' not in body: return { 'error': 'required_parameter_not_found: ', 'details': 'parameter: image_urls' }, 404
+    image_urls = body['image_urls'] if 'image_urls' in body else []
+    images = body['images'] if 'images' in body else []
+    if len(image_urls) + len(images) == 0: return { 'error': 'required_parameter_not_found: ', 'details': 'atleast 1 image required' }, 404
 
     vehicle = { 
         'image_urls': image_urls,
+        'images': images,
         'owner': uid,
         '_id': generate_id()
     }

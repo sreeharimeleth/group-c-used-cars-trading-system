@@ -104,7 +104,7 @@ def oauth2callback():
     for scope in request.args['scope'].split(' '):
         if scope in SCOPES: scopes.append(scope)
 
-    print(scopes)
+    # print(scopes)
     
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         CLIENT_SECRETS_FILE,
@@ -154,7 +154,7 @@ def oauth2callback():
         mainDatabase['User'].insert_one(user_data)
     else: user_data = user_query[0]
     
-    print(user_data)
+    # print(user_data)
 
     token = jwt.encode({
         'id': state,
