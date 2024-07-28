@@ -3,13 +3,17 @@
 import { ComponentAttributes } from "@/components/atrributes";
 import { CloseIcon } from "@/components/icons/close";
 import { useState } from "react";
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { useCallback, useMemo, useState } from "react";
 
 export function PriceDialog({hidden, prediction, onCancelled = () => {}, onContinue = () => {}}: ComponentAttributes & { onCancelled?: () => void, onContinue?: (price: number) => void, prediction?: number }) {
-    const [price, set_price] = useState("");            
-    function closeDialog(e:any) {
+    const [price, set_price] = useState("");
+    
+    const closeDialog = useCallback((e:any) => {
         e.stopPropagation();
         onCancelled();
-    }
+    }, [onCancelled]);
+    const continue_disabled = useMemo(() => prediction == undefined && price.length == 0, [prediction, price])
 
     if (hidden) return <div hidden />
     
@@ -21,12 +25,15 @@ export function PriceDialog({hidden, prediction, onCancelled = () => {}, onConti
                     <div className="text-xl dark:text-white font-semibold w-auto text-center p-2 mt-3">Set your Price</div>
                     <div className="text-gray-600 dark:text-white text-base ml-1 mt-4 mb-1">Your Price</div>
                     <input className="bg-gray-100 dark:bg-[#282828] placeholder:text-gray-400 rounded px-2 py-1 outline-none" 
-                    // placeholder={obj['price']} 
+                    placeholder={prediction?.toString()} 
                         value={price}
                         onChange={(e) => set_price(e.target.value)} 
                     />
                     <div hidden={prediction == undefined} className="text-sm text-green-600 bg-green-100 dark:text-green-200 dark:bg-green-800 w-min text-nowrap py-1 px-4 mt-2 self-end rounded-full">
                         AI Suggested Fair Price $ {prediction}
+                    </div>
+                    <div hidden={prediction != undefined} className="animate-pulse text-sm text-neutral-600 bg-neutral-100 dark:text-neutral-200 dark:bg-neutral-800 w-min text-nowrap py-1 px-4 mt-2 self-end rounded-full">
+                        Loading The AI Prediction...
                     </div>
                     {/* <DialogClose asChild> */}
                         <button className="
@@ -37,13 +44,13 @@ export function PriceDialog({hidden, prediction, onCancelled = () => {}, onConti
                         active:bg-gray-700 dark:active:bg-white/30" 
                         onClick={(e) => {
                             closeDialog(e);
-                            onContinue(Number(price));
+                            onContinue(price.length == 0? prediction!: Number(price));
                         }}>
                         Continue
                         </button>
                     {/* </DialogClose> */}
                 </div>
-                <button
+                <button disabled={continue_disabled}
                 className="text-black hover:bg-neutral-200 active:bg-neutral-300 dark:text-white dark:hover:bg-neutral-700 dark:active:bg-neutral-600 rounded-full px-1.5 py-1.5 focus:outline-none absolute top-3 right-3"
                 aria-label="Close"
                 onClick={(e) => closeDialog(e)}>

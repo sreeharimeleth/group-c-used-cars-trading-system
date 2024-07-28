@@ -20,6 +20,7 @@ export function VehicleListItem( { vehicle, className, shareButtonHidden, onDele
     const buttonRackNotFull = shareButtonHidden || onDelete == undefined || onEdit == undefined;
     const buttonIconSize = buttonRackNotFull? '5': '4'
     const buttonPadding = `p-${buttonRackNotFull? '2': '1.5'}`
+    // const us
 
     const handleShare = async () => {
         if (navigator.share) {
@@ -40,7 +41,7 @@ export function VehicleListItem( { vehicle, className, shareButtonHidden, onDele
 
     return (
         <div className={'flex min-w-72 overflow-clip border dark:text-white dark:border-white/5 rounded-lg bg-white dark:bg-white/5 '+className}  onClick={() => { router.push(`/product/${vehicle["_id"]}`) }}>
-            <Image alt="main_image" width={-1} height={-1} src={vehicle['image_urls'][0]} className="w-28 aspect-square overflow-clip object-cover bg-black/10 dark:bg-white/10"/>
+            <Image alt="main_image" width={-1} height={-1} src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${(vehicle.images ?? vehicle.image_urls ?? [])[0]}`} className="w-28 aspect-square overflow-clip object-cover bg-black/10 dark:bg-white/10"/>
             <div className='flex min-h-24 px-3 py-2 gap-2 flex-1'>
                 <div className='flex flex-col flex-1'>
                     <div className='font-bold text-lg'>

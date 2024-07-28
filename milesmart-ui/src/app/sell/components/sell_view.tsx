@@ -51,7 +51,7 @@ export function SellView({}:ComponentAttributes) {
       };
  
       const upload_vehicle = async (price: number) => {
-       const img_urls = Array<string>()
+       const img_ids = Array<string>()
        for (let index = 0; index < selected_files.length; index++) {
           const image = selected_files[index];
  
@@ -60,14 +60,14 @@ export function SellView({}:ComponentAttributes) {
           form_data.append('file', image)
           
           //Uploading images
-          const resp = await backendFetch(`http://localhost:5000/user/files`, {
+          const resp = await backendFetch(`/user/files`, {
              method: 'POST',
              body: form_data
           })
           
           if (resp.ok) {
              const file_obj = resp.data
-             img_urls.push(`http://localhost:5000/files/${file_obj['_id']}`)
+             img_ids.push(`${file_obj['_id']}`)
           } else {
              console.error(`Upload failed`)
           }
@@ -94,7 +94,7 @@ export function SellView({}:ComponentAttributes) {
              'drive': drive,
              'paint_color': paint,
              'state': state.split(' - ')[0].toLowerCase(), 
-             'image_urls': img_urls,
+             'images': img_ids,
              'type' : type
           })
        })
@@ -309,31 +309,33 @@ export function SellView({}:ComponentAttributes) {
                 disabled={!isFormComplete}
                 onClick={() => {
                   setContinueDialog(true)
-                  // backendFetch('/ml/price', {
-                  //   method: 'POST',
-                  //   headers: {
-                  //     'Content-Type': 'application/json',
-                  //   },
-                  //   body: JSON.stringify({
-                  //     'model': model,
-                  //     'VIN': vin,
-                  //     'year': Number(year),
-                  //     'manufacturer': brand,
-                  //     'condition': condition,
-                  //     'cylinders': cylinder,
-                  //     'fuel': fuel,
-                  //     'odometer': Number(distance),
-                  //     'title_status': status,
-                  //     'transmission': transmission,
-                  //     'drive': drive,
-                  //     'paint_color': paint,
-                  //     'state': state.toLowerCase(),
-                  //     'type': type
-                  //   })
-                  // }).then((resp) => {
-                  //   if (!resp.ok) console.log("ERROR")
-                  //   else set_prediction(resp.data)
-                  // })
+                  console.log("Running")
+                  set_prediction(undefined);
+                  backendFetch('/ml/price', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      'model': model.toLowerCase(),
+                      'VIN': vin,
+                      'year': Number(year),
+                      'manufacturer': brand.toLowerCase(),
+                      'condition': condition.toLowerCase(),
+                      'cylinders': cylinder.toLowerCase(),
+                      'fuel': fuel.toLowerCase(),
+                      'odometer': Number(distance),
+                      'title_status': status.toLowerCase(),
+                      'transmission': transmission.toLowerCase(),
+                      'drive': drive.toLowerCase(),
+                      'paint_color': paint.toLowerCase(),
+                      'state': state.toLowerCase(),
+                      'type': type
+                    })
+                  }).then((resp) => {
+                    if (!resp.ok) console.log("ERROR")
+                    else set_prediction(resp.data['price'].toFixed(2))
+                  })
                 }}>
                 Continue
               </button>
@@ -385,7 +387,7 @@ export function SellView({}:ComponentAttributes) {
       </div>
       
     </div>
-    <PriceDialog hidden={!ContinueDialog} onCancelled={() => setContinueDialog(false)} onContinue={(price) => {
+    <PriceDialog hidden={!ContinueDialog} prediction={prediction} onCancelled={() => setContinueDialog(false)} onContinue={(price) => {
       setLoading(true);
       upload_vehicle(price).then(() => setLoading(false))
     }}/>

@@ -30,7 +30,7 @@ export default async function Product({ params }: { params: { vid: string; }; })
       <HeaderBar />
 
       <div className="flex flex-none gap-4 p-4 flex-col lg:flex-row w-xl">
-        <ImageGallary linearFooter src={vehicle.image_urls} type='imageUrls' className="min-w-0 basis-2/3 xl:basis-1/2"/>
+        <ImageGallary linearFooter src={vehicle.images} type='imageIds' className="min-w-0 basis-2/3 xl:basis-1/2"/>
 
         <div className="flex flex-col gap-4 basis-1/3 xl:basis-1/2" >
           <div className="flex rounded-md bg-white dark:bg-white/10 p-4">

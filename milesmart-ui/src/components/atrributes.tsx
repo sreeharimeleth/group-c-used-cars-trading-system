@@ -14,7 +14,8 @@ export type BackendResponse = {
 export type Vehicle = { 
     _id: string, 
     fuel: string, 
-    image_urls: string[],
+    image_urls?: string[],
+    images?: string[]
     manufacturer: string,
     model: string,
     odometer: number,

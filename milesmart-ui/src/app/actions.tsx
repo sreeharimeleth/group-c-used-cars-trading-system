@@ -3,12 +3,6 @@
 import { BackendResponse } from "@/components/atrributes"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import { setTimeout } from "timers/promises"
-
-const server_url = 'http://localhost:5000'
-const ui_server_url = 'http://localhost:3000'
-const client_id = 'admin.client1'
-const password = `${client_id}.password`
  
 export async function login(callback: string) {
     const cookieStore = cookies()
@@ -16,15 +10,15 @@ export async function login(callback: string) {
 
     // console.log('Fetching Client Code...')
 
-    const client_code_resp = await fetch(new URL('client_code', server_url), {
+    const client_code_resp = await fetch(new URL('client_code', process.env.NEXT_PUBLIC_BACKEND_URL), {
         headers: { 
-            'Authorization': `Basic ${ btoa(`${client_id}:${password}`) }`,
+            'Authorization': `Basic ${ btoa(`${process.env.NEXT_PUBLIC_CLIENT_ID}:${process.env.CLIENT_SECRET}`) }`,
             'Content-Type': 'application/json' 
         },
         method: "POST",
         body: JSON.stringify({
             "client_type": "web",
-            "redirect_uri": new URL('callbacks/login', ui_server_url).toString()
+            "redirect_uri": new URL('callbacks/login', process.env.NEXT_PUBLIC_SERVER_URL).toString()
         })
     })
 
@@ -34,7 +28,7 @@ export async function login(callback: string) {
 
     // console.log(`Client code: ${client_code}\nredirecting...`)
 
-    redirect(new URL(`login?client_code=${client_code}`, server_url).toString())
+    redirect(new URL(`login?client_code=${client_code}`, process.env.NEXT_PUBLIC_BACKEND_URL).toString())
 }
 
 export async function logout() {
@@ -62,21 +56,19 @@ export async function deleteAccount() {
 export async function backendFetch(input: string | URL, init: RequestInit = {}) {
     const cookieStore = cookies();
     init.headers = init.headers as Record<string, string> ?? {}
-    init.headers['Client'] = client_id;
-    init.headers['Password'] = password;
+    init.headers['Client'] = process.env.NEXT_PUBLIC_CLIENT_ID ?? '';
+    init.headers['Password'] = process.env.CLIENT_SECRET ?? '';
     if ((cookieStore.get('token')?.value?.length ?? 0) > 0) init.headers['Authorization'] = `Bearer ${cookieStore.get('token')?.value}`
-    const url = new URL(input, server_url)
+    const url = new URL(input, process.env.NEXT_PUBLIC_BACKEND_URL)
 
     const resp: Response = await fetch(url, init);
+    const data = await resp.json()
+    // console.log(data)
 
     return {
-        data: resp.ok? await resp.json(): undefined,
+        data: resp.ok? data: undefined,
         status: resp.status,
         ok: resp.ok,
         headers: resp.headers
     } as BackendResponse
-}
-
-export async function lag() {
-    await setTimeout(3000)
 }
