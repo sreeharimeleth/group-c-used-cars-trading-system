@@ -1,7 +1,6 @@
 'use client'
 
 import { ComponentAttributes } from "@/components/atrributes";
-import { Cross2Icon } from "@radix-ui/react-icons";
 
 export function LoadDialog({hidden, onCancelled = () => {}}: ComponentAttributes & { onCancelled?: () => void }) {
 

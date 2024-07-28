@@ -1,0 +1,26 @@
+version: '3.8'
+
+networks:
+  host:
+    name: host
+    external: true
+
+services:
+  frontend:
+    depends_on:
+      - backend
+    ports:
+      - 3000:3000
+    container_name: frontend
+    image: ansifms/milesmart-ui:2.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+  backend:
+    # build:
+    #   context: /run/media/ansif/Home FS/ansif/AnsifDev/Suyati_Project/Server
+    #   dockerfile: /run/media/ansif/Home FS/ansif/AnsifDev/Suyati_Project/Server/Dockerfile
+    image: ansifms/milesmart-server:4.0
+    container_name: backend
+    ports:
+      - 5000:5000

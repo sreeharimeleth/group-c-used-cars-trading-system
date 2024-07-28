@@ -11,7 +11,7 @@ export function ShareButton({id, hidden}: ComponentAttributes & {id: string}) {
           await navigator.share({
             title: 'Share Vehicle!',
             text: 'Share the vehicle to your friends',
-            url: `http://localhost:3000/vehicle/${id}`,
+            url: new URL(`/product/${id}`).toString(),
           });
         //   console.log('Content shared successfully');
         } catch (error) {

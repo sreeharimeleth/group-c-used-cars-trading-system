@@ -4,21 +4,21 @@ import Image from "next/image"
 import { ComponentAttributes, Vehicle } from "../atrributes"
 import { useRouter } from "next/navigation"
 import { Badge } from "../server/badge"
-import { ShareIcon } from "../icons/share"
 import { FavoriteButton } from "./favourites_button"
 import { ShareButton } from "./share_button"
 
 type VehicleCardAttributes = ComponentAttributes & { 
     vehicle: Vehicle,
-    authenticated?: boolean
+    authenticated?: boolean,
+    backendUrl: string
 }
 
-export function VehicleCard( { vehicle, className, authenticated }: VehicleCardAttributes) {
+export function VehicleCard( { vehicle, className, authenticated, backendUrl }: VehicleCardAttributes) {
     const router = useRouter()
 
     return (
         <div className={'w-min-64 overflow-clip shadow-md border dark:border-white/5 rounded-lg flex flex-col bg-white dark:bg-white/5 '+className}  onClick={() => { router.push(`/product/${vehicle["_id"]}`) }}>
-            <Image alt="main_image" width={-1} height={-1} src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${(vehicle.images ?? vehicle.image_urls ?? [])[0]}`} className="w-full h-48 overflow-clip object-cover bg-black/10 dark:bg-white/10"/>
+            <Image alt="main_image" width={-1} height={-1} src={`${backendUrl}/files/${(vehicle.images ?? vehicle.image_urls ?? [])[0]}`} className="w-full h-48 overflow-clip object-cover bg-black/10 dark:bg-white/10"/>
             <div className='flex dark:text-white min-h-24 px-3 py-2 gap-2 flex-1'>
                 <div className='flex flex-col flex-1 justify-between'>
                     <div className='font-bold text-lg'>

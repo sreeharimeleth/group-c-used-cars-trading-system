@@ -18,10 +18,8 @@ export default async function Product({ params }: { params: { vid: string; }; })
   const [vehicle_resp, user_resp] = await Promise.all([backendFetch(`vehicles/${params.vid}`), backendFetch(`user`)]);
   if (!vehicle_resp.ok) notFound();
   const vehicle: Vehicle = vehicle_resp.data
-  const user: User = user_resp.data
   const authenticated = user_resp.ok;
-
-  console.log(vehicle.owner._id == user._id);
+  const user: User|undefined = authenticated? user_resp.data: undefined
 
   // await setTimeout(3000)
 
@@ -30,7 +28,7 @@ export default async function Product({ params }: { params: { vid: string; }; })
       <HeaderBar />
 
       <div className="flex flex-none gap-4 p-4 flex-col lg:flex-row w-xl">
-        <ImageGallary linearFooter src={vehicle.images} type='imageIds' className="min-w-0 basis-2/3 xl:basis-1/2"/>
+        <ImageGallary linearFooter src={vehicle.images} endpoint={`${process.env.BACKEND_URL}/files`} type='imageIds' className="min-w-0 basis-2/3 xl:basis-1/2"/>
 
         <div className="flex flex-col gap-4 basis-1/3 xl:basis-1/2" >
           <div className="flex rounded-md bg-white dark:bg-white/10 p-4">
@@ -73,8 +71,8 @@ export default async function Product({ params }: { params: { vid: string; }; })
                 </button>
               </div>
               <div className="flex flex-1">
-                <BuyNowButton hidden={vehicle.owner._id == user._id}/>
-              <button disabled hidden={vehicle.owner._id != user._id} className="
+                <BuyNowButton hidden={vehicle.owner._id == user?._id}/>
+              <button disabled hidden={vehicle.owner._id != user?._id} className="
                   px-4 py-1 duration-150 rounded-md h-min w-full
                   text-white 
                   bg-black dark:bg-white/20

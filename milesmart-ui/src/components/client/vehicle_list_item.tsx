@@ -12,10 +12,11 @@ type VehicleListItemAttributes = ComponentAttributes & {
     vehicle: Vehicle,
     shareButtonHidden?: boolean,
     onDelete?: () => void
-    onEdit?: () => void
+    onEdit?: () => void,
+    backendUrl: string
 }
 
-export function VehicleListItem( { vehicle, className, shareButtonHidden, onDelete, onEdit}: VehicleListItemAttributes) {
+export function VehicleListItem( { vehicle, className, shareButtonHidden, onDelete, onEdit, backendUrl}: VehicleListItemAttributes) {
     const router = useRouter()
     const buttonRackNotFull = shareButtonHidden || onDelete == undefined || onEdit == undefined;
     const buttonIconSize = buttonRackNotFull? '5': '4'
@@ -28,7 +29,7 @@ export function VehicleListItem( { vehicle, className, shareButtonHidden, onDele
             await navigator.share({
               title: 'Share Vehicle!',
               text: 'Share the vehicle to your friends',
-              url: `http://localhost:3000/product/${vehicle._id}`,
+              url: new URL(`/product/${vehicle._id}`).toString(),
             });
           //   console.log('Content shared successfully');
           } catch (error) {
@@ -41,7 +42,7 @@ export function VehicleListItem( { vehicle, className, shareButtonHidden, onDele
 
     return (
         <div className={'flex min-w-72 overflow-clip border dark:text-white dark:border-white/5 rounded-lg bg-white dark:bg-white/5 '+className}  onClick={() => { router.push(`/product/${vehicle["_id"]}`) }}>
-            <Image alt="main_image" width={-1} height={-1} src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${(vehicle.images ?? vehicle.image_urls ?? [])[0]}`} className="w-28 aspect-square overflow-clip object-cover bg-black/10 dark:bg-white/10"/>
+            <Image alt="main_image" width={-1} height={-1} src={`${backendUrl}/files/${(vehicle.images ?? vehicle.image_urls ?? [])[0]}`} className="w-28 aspect-square overflow-clip object-cover bg-black/10 dark:bg-white/10"/>
             <div className='flex min-h-24 px-3 py-2 gap-2 flex-1'>
                 <div className='flex flex-col flex-1'>
                     <div className='font-bold text-lg'>

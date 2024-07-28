@@ -1,5 +1,5 @@
 # Use the official Node.js 18 image as the base image
-FROM node:18-alpine
+FROM node:alpine3.19
 
 # Set the working directory
 WORKDIR /app
@@ -22,4 +22,4 @@ EXPOSE 3000
 ENV NODE_ENV production
 
 # Start the Next.js app
-CMD ["npm", "start", "-H", "0.0.0.0"]
+CMD ["npm", "start", "--", "-H", "0.0.0.0"]

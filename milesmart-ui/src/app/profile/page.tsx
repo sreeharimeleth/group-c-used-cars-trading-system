@@ -42,7 +42,7 @@ async function MyCarsSection({page = 0}: ComponentAttributes & { page?: number }
                     <div className="dark:text-white text-xl">My Cars</div>
                     <AddCarButton/>
                 </div>
-                <MyCarsListView vehicles={vehicles}/>
+                <MyCarsListView backendUrl={process.env.BACKEND_URL??''} vehicles={vehicles}/>
             </div>
             <Pagination parameterName="my_cars_page" maxPages={query_response_object['pages']}/>
         </div>
@@ -61,7 +61,7 @@ async function MyFavouritesSection({page = 0}: ComponentAttributes & { page?: nu
                 <div className="xl:flex hidden justify-between items-center px-5 py-3 h-16 border-b-2 dark:border-neutral-700">
                     <div className="dark:text-white text-xl">My Favorites</div>
                 </div>
-                <MyFavoritesListView wishlists={wishlists}/>
+                <MyFavoritesListView backendUrl={process.env.BACKEND_URL??''} wishlists={wishlists}/>
             </div>
             <Pagination parameterName="favourites_page" maxPages={query_response_object['pages']}/>
         </div>

@@ -18,7 +18,7 @@ type ImageGallaryAttributes = ComponentAttributes & {
     onFileDelete?: (index: number) => void
 }
 
-export function ImageGallary({type = 'imageUrls', src, endpoint = `${process.env.NEXT_PUBLIC_BACKEND_URL}/files`, fileChoosingEnabled, onFilesAdded, className, onFileDelete, linearFooter}: ImageGallaryAttributes) {
+export function ImageGallary({type = 'imageUrls', src, endpoint = ``, fileChoosingEnabled, onFilesAdded, className, onFileDelete, linearFooter}: ImageGallaryAttributes) {    
     const [imageUrls, setImageUrls] = useState<string[]>([])
     const [selection, setSelection] = useState(0)
     const [hovered, setHovered] = useState(false)

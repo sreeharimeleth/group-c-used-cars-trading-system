@@ -2,8 +2,6 @@
 
 import { ComponentAttributes } from "@/components/atrributes";
 import { CloseIcon } from "@/components/icons/close";
-import { useState } from "react";
-import { Cross2Icon } from "@radix-ui/react-icons";
 import { useCallback, useMemo, useState } from "react";
 
 export function PriceDialog({hidden, prediction, onCancelled = () => {}, onContinue = () => {}}: ComponentAttributes & { onCancelled?: () => void, onContinue?: (price: number) => void, prediction?: number }) {

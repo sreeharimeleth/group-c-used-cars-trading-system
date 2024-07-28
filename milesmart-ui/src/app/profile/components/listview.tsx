@@ -7,21 +7,23 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 type ListViewAttributes = ComponentAttributes & {
-    vehicles: Vehicle[]
+    vehicles: Vehicle[],
+    backendUrl: string
 }
 
 type MyFavoritesListView = ComponentAttributes & {
-    wishlists: Wishlist[]
+    wishlists: Wishlist[],
+    backendUrl: string
 }
 
-export function MyCarsListView({className, vehicles}: ListViewAttributes) {
+export function MyCarsListView({className, vehicles, backendUrl}: ListViewAttributes) {
     const [data, setData] = useState(vehicles)
     const router = useRouter()
 
     return (
         <div className={`flex flex-col overflow-auto xl:h-profile-listview md:h-profile-listview-md p-2 gap-2 ${className}`}>
             {data.map((vehicle, index) => {
-                return <VehicleListItem vehicle={vehicle} shareButtonHidden key={index} onDelete={() => {
+                return <VehicleListItem vehicle={vehicle} backendUrl={backendUrl} shareButtonHidden key={index} onDelete={() => {
                     data.splice(index, 1)
                     setData([...data])
                     backendFetch(`/user/vehicles/${vehicle._id}`, { method: 'DELETE' })
@@ -31,13 +33,13 @@ export function MyCarsListView({className, vehicles}: ListViewAttributes) {
     )
 }
 
-export function MyFavoritesListView({className, wishlists}: MyFavoritesListView) {
+export function MyFavoritesListView({className, wishlists, backendUrl}: MyFavoritesListView) {
     const [data, setData] = useState(wishlists)
 
     return (
         <div className={`flex flex-col overflow-auto xl:h-profile-listview md:h-profile-listview-md p-2 gap-2 ${className}`}>
             {data.map((wishlist, index) => {
-                return <VehicleListItem vehicle={wishlist.vehicle as Vehicle} key={index} onDelete={() => {
+                return <VehicleListItem backendUrl={backendUrl} vehicle={wishlist.vehicle as Vehicle} key={index} onDelete={() => {
                     data.splice(index, 1)
                     setData([...data])
                     const id = 

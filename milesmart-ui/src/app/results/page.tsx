@@ -47,7 +47,7 @@ async function Page({ searchParams }: { searchParams: SearchParamsAttributes }) 
 	const result = result_resp.data as SearchResult<Vehicle>
     const authenticated = user_resp.ok;
 
-	return <SearchView result={result} authenticated={authenticated}/>
+	return <SearchView result={result} authenticated={authenticated} backendUrl={process.env.BACKEND_URL ?? ''}/>
 }
 
 function PageSkeleton() {
