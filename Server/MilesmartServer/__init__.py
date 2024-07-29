@@ -1,3 +1,4 @@
+import os
 import time
 from flask import Flask, Response
 from flask_cors import CORS
@@ -27,4 +28,10 @@ def generate_id(id: int|None = None) -> str:
 def test():
     return Response(status=204)
 
-from . import vehicles, authentication, storage, users, wishlist, price_prediction
+from . import vehicles, authentication, storage, users, wishlist
+
+if 'DISABLE_ML' in os.environ and os.environ['DISABLE_ML'] == 'TRUE':
+    @milesmartServer.route('/ml/price', methods=['POST'])
+    def predict_price():
+        return { 'error': 'SERVICE_UNAVAILABLE', 'message': 'This Service is either diabled or failed to boot' }, 503
+else: from . import price_prediction
