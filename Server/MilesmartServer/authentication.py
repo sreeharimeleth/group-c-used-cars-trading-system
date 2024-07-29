@@ -211,6 +211,7 @@ def requiresAuthPrivilege(requested_privilege: int):
             if not client_authorized:
                 return { "error": "UNAUTHORIZED", "message": "Unknown client" }, 401
 
+            # print(request.authorization.token)
             try: id = jwt.decode(request.authorization.token, milesmartServer.config['SECRET_KEY'], algorithms=['HS256'])['id']
             except: return { "error": "BAD_TOKEN", "message": "Invalid token" }, 400
             
