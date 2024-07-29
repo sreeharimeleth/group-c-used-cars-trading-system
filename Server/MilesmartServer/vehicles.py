@@ -181,6 +181,7 @@ def user_vehicle_post(current_user = None):
         'image_urls': image_urls,
         'images': images,
         'owner': uid,
+        'name': f'{body['manufacturer']} {body['model']}',
         '_id': generate_id()
     }
 
